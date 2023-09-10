@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
 import { ThreadValidation } from "@/lib/validations/thread";
+import { createThread } from "@/lib/actions/thread.actions";
 
 interface PostThreadProps {
   userId: string;
@@ -37,7 +38,15 @@ export const PostThread = ({ userId }: PostThreadProps) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {};
+  const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
+    await createThread({
+      text: values.thread,
+      author: userId,
+      communityId: null,
+      path: pathname,
+    });
+    router.push("/");
+  };
 
   return (
     <Form {...form}>
@@ -68,5 +77,3 @@ export const PostThread = ({ userId }: PostThreadProps) => {
     </Form>
   );
 };
-
-export default PostThread;

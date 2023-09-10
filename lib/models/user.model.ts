@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface IUser {
+  _id: string;
   id: string;
   username: string;
   name: string;
