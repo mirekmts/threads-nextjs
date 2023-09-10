@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import User from "../models/user.model";
+import User, { IUser } from "../models/user.model";
 import { connectToDB } from "../mongoose";
 
 interface User {
@@ -41,5 +41,18 @@ export async function updateUser({
   } catch (error: any) {
     console.log("🚀 ~ file: user.actions.ts:42 ~ error:", error);
     throw new Error(`Failed to create/update user: ${error.message}`);
+  }
+}
+
+export async function fetchUser(userId: string) {
+  try {
+    connectToDB();
+
+    return User.findOne<IUser>({ id: userId });
+    // .populate({
+
+    // })
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user: ${error.message}`);
   }
 }
