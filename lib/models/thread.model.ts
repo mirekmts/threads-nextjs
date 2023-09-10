@@ -8,7 +8,7 @@ export interface IThread {
   parentId?: string | undefined;
 }
 
-const threadSchema = new mongoose.Schema<IThread>({
+const threadSchema = new mongoose.Schema({
   text: {
     type: String,
     required: true,
@@ -37,8 +37,6 @@ const threadSchema = new mongoose.Schema<IThread>({
   ],
 });
 
-const Thread =
-  mongoose.models.Thread<IThread> ||
-  mongoose.model<IThread>("Thread", threadSchema);
+const Thread = mongoose.models.Thread || mongoose.model("Thread", threadSchema);
 
 export default Thread;
