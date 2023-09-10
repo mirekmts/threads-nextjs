@@ -16,8 +16,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserValidation } from "@/lib/validations/user";
 import * as z from "zod";
 import Image from "next/image";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
+import { isBase64Image } from "@/lib/utils";
+import { useUploadThing } from "@/lib/uploadthing";
 
 interface AccountProfileProps {
   user: {
@@ -32,33 +34,53 @@ interface AccountProfileProps {
 }
 
 export const AccountProfile = ({ btnTitle, user }: AccountProfileProps) => {
+  const [files, setFiles] = useState<File[]>([]);
+  const { startUpload } = useUploadThing("media");
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
-      name: "",
-      username: "",
-      bio: "",
-      profile_photo: "",
+      name: user.name || "",
+      username: user.username || "",
+      bio: user.bio || "",
+      profile_photo: user.image || "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof UserValidation>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof UserValidation>) => {
+    const blob = values.profile_photo;
+
+    const hasImageChange = isBase64Image(blob);
+
+    if (hasImageChange) {
+      const imgRes = await startUpload(files);
+
+      if (imgRes && imgRes[0].url) {
+        values.profile_photo = imgRes[0].url;
+      }
+    }
+
+    // TODO: Update user profile
+  };
 
   const handleImage = (
-    e: ChangeEvent,
+    e: ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string) => void
   ) => {
     e.preventDefault();
-    // const file = e.target.files[0];
-    // const reader = new FileReader();
-    // reader.readAsDataURL(file);
-    // reader.onloadend = () => {
-    //   fieldChange(reader.result as string);
-    // };
+
+    if (e.target.files && e.target.files.length > 0) {
+      const reader = new FileReader();
+      const file = e.target.files[0];
+      setFiles(Array.from(e.target.files));
+
+      if (!file.type.includes("image")) return;
+
+      reader.onloadend = async (event) => {
+        const imageDataUrl = event.target?.result?.toString() || "";
+        fieldChange(imageDataUrl);
+      };
+      reader.readAsDataURL(file);
+    }
   };
   return (
     <Form {...form}>
@@ -91,12 +113,12 @@ export const AccountProfile = ({ btnTitle, user }: AccountProfileProps) => {
                   />
                 )}
               </FormLabel>
-              <FormControl className="flex-1 text-base-semibold text-grey-200">
+              <FormControl className="flex-1 text-base-semibold text-gray-200">
                 <Input
                   type="file"
                   accept="image/*"
                   placeholder="Upload a photo"
-                  className="account-form_image-input"
+                  className="account-form_image-input "
                   onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>
