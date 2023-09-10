@@ -1,6 +1,16 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+export interface IUser {
+  id: string;
+  username: string;
+  name: string;
+  threads: mongoose.Types.ObjectId[];
+  onboarded: boolean;
+  communities: mongoose.Types.ObjectId[];
+  image?: string | undefined;
+  bio?: string | undefined;
+}
+const userSchema = new mongoose.Schema<IUser>({
   id: {
     type: String,
     required: true,
@@ -34,6 +44,7 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+const User =
+  mongoose.models.User<IUser> || mongoose.model<IUser>("User", userSchema);
 
 export default User;
