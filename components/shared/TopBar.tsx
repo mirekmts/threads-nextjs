@@ -1,4 +1,10 @@
-import { OrganizationSwitcher, SignOutButton, SignedIn } from "@clerk/nextjs";
+import {
+  OrganizationSwitcher,
+  SignInButton,
+  SignOutButton,
+  SignedIn,
+  SignedOut,
+} from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { dark } from "@clerk/themes";
@@ -24,6 +30,19 @@ export const TopBar = () => {
               </div>
             </SignOutButton>
           </SignedIn>
+          <SignedOut>
+            <SignInButton>
+              <div className="flex cursor-pointer gap-4 p-4">
+                <Image
+                  src={"/assets/login.svg"}
+                  alt="logout"
+                  width={24}
+                  height={24}
+                />
+                <p className="text-light-2 max-lg:hidden">Login</p>
+              </div>
+            </SignInButton>
+          </SignedOut>
         </div>
 
         <OrganizationSwitcher
