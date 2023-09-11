@@ -6,7 +6,7 @@ import { DeleteThread } from "../forms/DeleteThread";
 
 interface ThreadCardProps {
   id: string;
-  currentUserId: string;
+  currentUserId?: string;
   parentId: string | null;
   content: string;
   author: {
@@ -114,13 +114,16 @@ function ThreadCard({
             </div>
           </div>
         </div>
-        <DeleteThread
-          threadId={JSON.stringify(id)}
-          currentUserId={currentUserId}
-          authorId={author.id}
-          parentId={parentId}
-          isComment={isComment}
-        />
+
+        {currentUserId ? (
+          <DeleteThread
+            threadId={JSON.stringify(id)}
+            currentUserId={currentUserId}
+            authorId={author.id}
+            parentId={parentId}
+            isComment={isComment}
+          />
+        ) : null}
       </div>
 
       {!isComment && comments.length > 0 && (
