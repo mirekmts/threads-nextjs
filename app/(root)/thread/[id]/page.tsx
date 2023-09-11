@@ -36,7 +36,7 @@ const Thread = async ({ params }: { params: { id: string } }) => {
       <div className="mt-7">
         <Comment
           threadId={params.id}
-          currentUserImg={userInfo.image!}
+          currentUserImg={userInfo.image!} // TODO fix this TS hack
           currentUserId={userInfo._id.toString()}
         />
       </div>
