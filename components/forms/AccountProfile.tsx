@@ -31,10 +31,9 @@ interface AccountProfileProps {
     bio: string;
     image: string;
   };
-  btnTitle: string;
 }
 
-export const AccountProfile = ({ btnTitle, user }: AccountProfileProps) => {
+export const AccountProfile = ({ user }: AccountProfileProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const { startUpload } = useUploadThing("media");
   const pathname = usePathname();
@@ -199,7 +198,7 @@ export const AccountProfile = ({ btnTitle, user }: AccountProfileProps) => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Continue</Button>
       </form>
     </Form>
   );
