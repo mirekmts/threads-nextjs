@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { formatDateString } from "@/lib/utils";
+import { DeleteThread } from "../forms/DeleteThread";
 
 interface ThreadCardProps {
   id: string;
@@ -38,6 +39,7 @@ function ThreadCard({
   comments,
   isComment,
 }: ThreadCardProps) {
+  console.log("🚀 ~ file: ThreadCard.tsx:42 ~ id:", id);
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
@@ -112,6 +114,13 @@ function ThreadCard({
             </div>
           </div>
         </div>
+        <DeleteThread
+          threadId={JSON.stringify(id)}
+          currentUserId={currentUserId}
+          authorId={author.id}
+          parentId={parentId}
+          isComment={isComment}
+        />
       </div>
 
       {!isComment && comments.length > 0 && (
