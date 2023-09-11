@@ -50,7 +50,10 @@ export async function fetchUser(userId: string) {
   try {
     connectToDB();
 
-    return User.findOne<IUser>({ id: userId });
+    return User.findOne<IUser>({ id: userId }).populate({
+      path: "communities",
+      model: "Community",
+    });
   } catch (error: any) {
     throw new Error(`Failed to fetch user: ${error.message}`);
   }
@@ -66,12 +69,17 @@ export async function fetchUserPosts(userId: string) {
       model: "Thread",
       populate: [
         {
+          path: "community",
+          model: "Community",
+          select: "name id image _id",
+        },
+        {
           path: "children",
           model: "Thread",
           populate: {
             path: "author",
             model: "User",
-            select: "name image id", // Select the "name" and "_id" fields from the "User" model
+            select: "name image id",
           },
         },
       ],
