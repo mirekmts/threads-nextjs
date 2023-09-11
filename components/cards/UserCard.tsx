@@ -10,7 +10,7 @@ interface UserCardProps {
   name: string;
   username: string;
   imgUrl: string;
-  personType: string;
+  isCommunity: boolean;
 }
 
 export const UserCard = ({
@@ -18,11 +18,9 @@ export const UserCard = ({
   name,
   username,
   imgUrl,
-  personType,
+  isCommunity,
 }: UserCardProps) => {
   const router = useRouter();
-
-  const isCommunity = personType === "Community";
 
   return (
     <article className="user-card">
@@ -30,7 +28,7 @@ export const UserCard = ({
         <div className="relative h-12 w-12">
           <Image
             src={imgUrl}
-            alt="user_logo"
+            alt="User Image Profile"
             fill
             className="rounded-full object-cover"
           />
