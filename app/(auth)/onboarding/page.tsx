@@ -7,15 +7,16 @@ async function Page() {
   if (!user) return null;
 
   const userInfo = await fetchUser(user.id);
-  console.log("🚀 ~ file: page.tsx:10 ~ Page ~ userInfo:", userInfo);
+
+  if (!userInfo) return null;
 
   const userData = {
-    id: user?.id,
-    objectId: userInfo?._id,
-    username: userInfo?.username || user?.username,
-    name: userInfo?.name || user?.firstName || "",
-    bio: userInfo?.bio || "",
-    image: userInfo?.image || user?.imageUrl,
+    id: user.id,
+    objectId: userInfo._id,
+    username: userInfo.username || user.username || "",
+    name: userInfo.name || user?.firstName || "",
+    bio: userInfo.bio || "",
+    image: userInfo.image || user?.imageUrl,
   };
   return (
     <main className="mx-auto flex max-w-3xl flex-col justify-start px-10 py-20">
