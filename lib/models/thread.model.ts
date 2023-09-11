@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
+// export interface IThread<TAuthor, TChildren, TCommunity> {
 export interface IThread {
+  _id: string;
   text: string;
   author: mongoose.Types.ObjectId;
   createdAt: Date;
