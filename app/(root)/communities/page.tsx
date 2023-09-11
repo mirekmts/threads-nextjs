@@ -1,12 +1,9 @@
 import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
-
 import { SearchBar } from "@/components/shared/SearchBar";
 import { Pagination } from "@/components/shared/Pagination";
 import { CommunityCard } from "@/components/cards/CommunityCard";
-
-import { fetchUser } from "@/lib/actions/user.actions";
 import { fetchCommunities } from "@/lib/actions/community.actions";
+import { getUserInfo } from "@/lib/utils";
 
 async function Page({
   searchParams,
@@ -16,8 +13,7 @@ async function Page({
   const user = await currentUser();
   if (!user) return null;
 
-  const userInfo = await fetchUser(user.id);
-  if (!userInfo?.onboarded) redirect("/onboarding");
+  await getUserInfo(user.id);
 
   const result = await fetchCommunities({
     searchString: searchParams.q,
